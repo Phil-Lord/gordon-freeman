@@ -1,0 +1,73 @@
+---
+interface Props {
+	triggerId: string
+}
+
+const { triggerId } = Astro.props
+---
+
+<div
+	class="crowbar-stage pointer-events-none fixed inset-0 overflow-hidden z-50"
+	data-trigger-id={triggerId}
+>
+</div>
+
+<style is:global>
+	@keyframes crowbar-fall {
+		0% {
+			transform: translateY(-10vh) rotate(var(--start-rot));
+			opacity: 0;
+		}
+		10% {
+			opacity: 1;
+		}
+		100% {
+			transform: translateY(110vh) rotate(var(--end-rot));
+			opacity: 1;
+		}
+	}
+
+	.crowbar {
+		position: absolute;
+		top: 0;
+		animation: crowbar-fall linear both;
+		will-change: transform, opacity;
+	}
+</style>
+
+<script>
+	const COUNT = 30
+
+	const stages = document.querySelectorAll<HTMLElement>(".crowbar-stage")
+
+	stages.forEach((stage) => {
+		const triggerId = stage.dataset.triggerId
+		if (!triggerId) return
+		const trigger = document.getElementById(triggerId)
+		if (!trigger) return
+
+		trigger.addEventListener("click", () => {
+			for (let i = 0; i < COUNT; i++) {
+				const img = document.createElement("img")
+				img.src = "/orange-crowbar.svg"
+				img.alt = ""
+				img.className = "crowbar"
+
+				const size = 32 + Math.random() * 64
+				const startRot = Math.random() * 360
+				const endRot = startRot + (Math.random() * 720 - 360)
+
+				img.style.left = `${Math.random() * 100}vw`
+				img.style.width = `${size}px`
+				img.style.height = `${size}px`
+				img.style.animationDuration = `${1.2 + Math.random() * 1.8}s`
+				img.style.animationDelay = `${Math.random() * 0.4}s`
+				img.style.setProperty("--start-rot", `${startRot}deg`)
+				img.style.setProperty("--end-rot", `${endRot}deg`)
+
+				img.addEventListener("animationend", () => img.remove())
+				stage.appendChild(img)
+			}
+		})
+	})
+</script>

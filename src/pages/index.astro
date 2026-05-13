@@ -1,11 +1,13 @@
 ---
 import Layout from "@/layouts/main.astro"
 import { Button } from "@/components/ui/button"
+import CrowbarRain from "@/components/CrowbarRain.astro"
 ---
 
 <Layout>
 	<div class="grid h-screen place-items-center content-center">
 		<h1>Gordon Freeman λ</h1>
-		<Button>a button</Button>
+		<Button id="crowbar-trigger">a button</Button>
 	</div>
+	<CrowbarRain triggerId="crowbar-trigger" />
 </Layout>
