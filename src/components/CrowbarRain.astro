@@ -57,7 +57,7 @@ const { triggerId } = Astro.props
 				const startRot = Math.random() * 360
 				const endRot = startRot + (Math.random() * 720 - 360)
 
-				img.style.left = `${Math.random() * 100}vw`
+				img.style.left = `calc(${Math.random() * 100}vw - ${size / 2}px)`
 				img.style.width = `${size}px`
 				img.style.height = `${size}px`
 				img.style.animationDuration = `${1.2 + Math.random() * 1.8}s`
