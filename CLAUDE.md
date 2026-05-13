@@ -63,6 +63,25 @@ This project exists to build practical familiarity with each layer of the stack.
 - No unnecessary dependencies — this is a brochure site, not an app
 - All pages should be statically rendered (no SSR)
 
+### Component structure
+
+- Co-locating markup, `<style>`, and `<script>` in a single `.astro` file is idiomatic — don't split files preemptively
+- Extract a component when the behaviour is reused across pages, or when a page is growing large enough that a self-contained feature is hurting readability
+- A well-formed component owns its template, its styles, and its script in one file, and exposes behaviour via props
+
+### Client-side scripts in `.astro` components
+
+- Prefer plain `<script>` blocks — they are bundled by Vite (tree-shaken, type-checked) and run once on page load
+- To pass a prop into a `<script>`, set a `data-*` attribute on a template element and read it in the script. **Avoid `define:vars`**, which forces the script inline and disables bundling
+- Use `document.querySelectorAll(...)` over `getElementById` inside component scripts, so the same component can appear multiple times on a page without conflict
+- Lift magic numbers (counts, sizes, timings) to named constants at the top of the script — easy to promote to props later
+
+### Styles in `.astro` components
+
+- `<style>` blocks are scoped by default — class names and `@keyframes` are hashed to the component
+- Prefer scoped styles. Reach for `is:global` only when a script creates DOM elements at runtime that need styling (scoped classes won't apply to elements the template didn't author)
+- When using `is:global`, namespace class and keyframe names clearly (e.g. `crowbar-stage`, `crowbar-fall`) to make collisions effectively impossible
+
 ---
 
 ## Deployment
